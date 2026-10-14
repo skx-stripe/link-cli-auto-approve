@@ -78,7 +78,9 @@ export const createOptions = z.object({
   useApprovalPolicy: z
     .boolean()
     .default(false)
-    .describe('Use approval policy through the delegated approval flow'),
+    .describe(
+      'Use approval policy through the delegated approval flow (beta, available only to select OAuth clients)',
+    ),
   outputFile: z
     .string()
     .optional()
@@ -188,5 +190,7 @@ export const updateOptions = z.object({
   useApprovalPolicy: z
     .boolean()
     .default(false)
-    .describe('Use approval policy through the delegated approval flow'),
+    .describe(
+      'Use approval policy through the delegated approval flow (beta, available only to select OAuth clients)',
+    ),
 });
