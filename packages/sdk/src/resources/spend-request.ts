@@ -59,6 +59,7 @@ const duplicateSpendRequestErrorSchema = z.looseObject({
 
 type InternalCreateSpendRequestParams = CreateSpendRequestParams & {
   approve?: boolean;
+  use_approval_policy?: boolean;
   expires_at?: number;
   recurring?: { interval: RecurringInterval; interval_count?: number };
 };

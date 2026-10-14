@@ -289,21 +289,30 @@ describe('SpendRequestResource', () => {
       expect(sentBody.test).toBeUndefined();
     });
 
-    it('sends delegated requests to /spend_requests/create_delegated when approve is true', async () => {
-      mockFetchResponse(200, spendRequestResponse);
+    it.each([false, true])(
+      'sends delegated creation with useApprovalPolicy=%s',
+      async (useApprovalPolicy) => {
+        mockFetchResponse(200, spendRequestResponse);
 
-      await repo.create({
-        ...validParams,
-        approve: true,
-        idempotency_key: 'delegated-key',
-      });
+        await repo.create({
+          ...validParams,
+          approve: true,
+          ...(useApprovalPolicy ? { use_approval_policy: true } : {}),
+          idempotency_key: 'delegated-key',
+        });
 
-      const [url, opts] = mockFetch.mock.calls[0]!;
-      expect(url).toBe('https://api.link.com/spend_requests/create_delegated');
-      const sentBody = JSON.parse(opts.body);
-      expect(sentBody.approve).toBeUndefined();
-      expect(sentBody.idempotency_key).toBe('delegated-key');
-    });
+        const [url, opts] = mockFetch.mock.calls[0]!;
+        expect(url).toBe(
+          'https://api.link.com/spend_requests/create_delegated',
+        );
+        const sentBody = JSON.parse(opts.body);
+        expect(sentBody.approve).toBeUndefined();
+        expect(sentBody.use_approval_policy).toBe(
+          useApprovalPolicy ? true : undefined,
+        );
+        expect(sentBody.idempotency_key).toBe('delegated-key');
+      },
+    );
 
     it('keeps an incomplete keyed creation 409 as a LinkApiError', async () => {
       mockFetchResponse(409, {
