@@ -66,6 +66,7 @@ type InternalCreateSpendRequestParams = CreateSpendRequestParams & {
 
 type InternalUpdateSpendRequestParams = UpdateSpendRequestParams & {
   approve?: boolean;
+  use_approval_policy?: boolean;
 };
 
 /** Normalizes the legacy string SPT response into the current object shape. */

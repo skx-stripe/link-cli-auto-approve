@@ -188,5 +188,5 @@ export const updateOptions = z.object({
   useApprovalPolicy: z
     .boolean()
     .default(false)
-    .describe('Use delegated approval for this update'),
+    .describe('Use approval policy through the delegated approval flow'),
 });

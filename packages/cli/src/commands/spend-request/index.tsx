@@ -438,6 +438,7 @@ export function createSpendRequestCli(
           typeof item === 'string' ? parseTotalFlag(item) : item,
         );
       params.approve = useDelegatedApproval;
+      params.use_approval_policy = opts.useApprovalPolicy ? true : undefined;
 
       if (!c.agent && !c.formatExplicit) {
         let capturedResult: SpendRequest | null = null;

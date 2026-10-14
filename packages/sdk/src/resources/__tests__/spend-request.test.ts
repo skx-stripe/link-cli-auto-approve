@@ -363,20 +363,32 @@ describe('SpendRequestResource', () => {
       expect(opts.body).toBe(JSON.stringify({ payment_details: 'pd_new' }));
     });
 
-    it('sends delegated updates to update_delegated without the approve routing flag', async () => {
-      mockFetchResponse(200, {
-        ...spendRequestResponse,
-        amount: 6000,
-        approval_url: 'https://app.link.com/approve/si_123',
-      });
+    it.each([false, true])(
+      'sends delegated update with useApprovalPolicy=%s',
+      async (useApprovalPolicy) => {
+        mockFetchResponse(200, {
+          ...spendRequestResponse,
+          amount: 6000,
+          approval_url: 'https://app.link.com/approve/si_123',
+        });
 
-      await repo.update('si_123', { amount: 6000, approve: true });
+        await repo.update('si_123', {
+          amount: 6000,
+          approve: true,
+          ...(useApprovalPolicy ? { use_approval_policy: true } : {}),
+        });
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.link.com/spend_requests/si_123/update_delegated',
-        expect.objectContaining({ body: JSON.stringify({ amount: 6000 }) }),
-      );
-    });
+        expect(mockFetch).toHaveBeenCalledWith(
+          'https://api.link.com/spend_requests/si_123/update_delegated',
+          expect.objectContaining({
+            body: JSON.stringify({
+              amount: 6000,
+              ...(useApprovalPolicy ? { use_approval_policy: true } : {}),
+            }),
+          }),
+        );
+      },
+    );
 
     it('uses the standard endpoint when approve is false', async () => {
       mockFetchResponse(200, { ...spendRequestResponse, amount: 6000 });

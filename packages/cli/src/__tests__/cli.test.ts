@@ -1287,12 +1287,18 @@ describe('production mode', { timeout: CLI_TIMEOUT_MS + 5_000 }, () => {
     });
 
     it.each([
-      { approvalFlags: ['--approve'] },
-      { approvalFlags: ['--use-approval-policy'] },
-      { approvalFlags: ['--approve', '--use-approval-policy'] },
-      { approvalFlags: ['--approve', '--no-use-approval-policy'] },
+      { approvalFlags: ['--approve'], useApprovalPolicy: false },
+      { approvalFlags: ['--use-approval-policy'], useApprovalPolicy: true },
+      {
+        approvalFlags: ['--approve', '--use-approval-policy'],
+        useApprovalPolicy: true,
+      },
+      {
+        approvalFlags: ['--approve', '--no-use-approval-policy'],
+        useApprovalPolicy: false,
+      },
     ])('uses delegated update with $approvalFlags', async (approvalCase) => {
-      const { approvalFlags } = approvalCase;
+      const { approvalFlags, useApprovalPolicy } = approvalCase;
       setNextResponse(200, {
         ...BASE_REQUEST,
         amount: 6000,
@@ -1314,7 +1320,10 @@ describe('production mode', { timeout: CLI_TIMEOUT_MS + 5_000 }, () => {
       expect(lastRequest.url).toBe(
         '/spend_requests/lsrq_prod_001/update_delegated',
       );
-      expect(JSON.parse(lastRequest.body)).toEqual({ amount: 6000 });
+      expect(JSON.parse(lastRequest.body)).toEqual({
+        amount: 6000,
+        ...(useApprovalPolicy ? { use_approval_policy: true } : {}),
+      });
     });
 
     it('surfaces API errors for update', async () => {
