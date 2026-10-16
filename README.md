@@ -467,6 +467,16 @@ identity. Card requests may also include `--network-id` to identify the merchant
 network profile.
 
 **Constraints:** `context` must be at least 100 characters; `amount` is an integer in the currency's smallest unit (e.g. cents) and must not exceed 50000 USD cents equivalent; `currency` can be any supported 3-letter ISO code. The user has 30 minutes from when approval is requested to approve. Approved credentials (card or SPT) are valid for 12 hours from spend request creation.
+
+Omitting currency uses the consumer's default spend-request currency, reported by
+`userinfo.default_spend_request_currency` (`user-info retrieve` in the CLI).
+Specify currency explicitly when using an amount from a checkout with a known
+currency. Amounts, line-item `unit_amount` values, and total `amount` values use
+the selected currency's minor units: `100` means ¥100 in JPY or $1 in USD.
+The client passes amounts through unchanged and performs no FX conversion.
+This default applies to newly created requests; existing requests retain their
+stored currency.
+
 **Test mode:** Pass `--test` to create a testmode SpendRequest. A testmode SpendRequest will return test payment credentials (e.g test card `4000009990001984`) rather than a real payment credential. Testmode SpendRequests will not charge the underlying payment method of the SpendRequest. This is useful for development and integration testing without real payment methods.
 
 ```bash
@@ -793,3 +803,11 @@ CI runs the same publish dry-run for every pull request.
 The Go SDK is a nested module and is released with a repository tag such as
 `packages/sdk-go/v0.1.0`. Go module tags are independent of npm package
 versions.
+
+The Python SDK is published to PyPI as `stripe-link-sdk` using GitHub OIDC Trusted
+Publishing, with attestations for its wheel and source distribution. Its
+versions are independent of npm and Go: update `project.version` in
+`packages/sdk-python/pyproject.toml`, refresh `uv.lock`, and add Python changelog
+notes in a PR. Merging to `main` publishes an unpublished version automatically
+after the Python checks pass. See the [Python release guide](packages/sdk-python/README.md#releasing)
+for one-time PyPI setup, verification, and recovery.

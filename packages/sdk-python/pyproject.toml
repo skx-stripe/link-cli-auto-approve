@@ -1,5 +1,5 @@
 [project]
-name = "link-sdk"
+name = "stripe-link-sdk"
 version = "0.1.0"
 description = "Typed synchronous and asynchronous clients for the Link API"
 readme = "README.md"
@@ -12,6 +12,10 @@ dependencies = [
     "pydantic>=2.10,<3; python_version < '3.14'",
     "pydantic>=2.12,<3; python_version >= '3.14'",
 ]
+
+[project.urls]
+Repository = "https://github.com/stripe/link-cli/tree/main/packages/sdk-python"
+Issues = "https://github.com/stripe/link-cli/issues"
 
 [build-system]
 requires = ["uv_build>=0.9.22,<0.10.0"]
@@ -39,5 +43,6 @@ dev = [
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
     "ruff>=0.16.7",
+    "twine>=7.0.0",
     "ty>=0.0.81",
 ]

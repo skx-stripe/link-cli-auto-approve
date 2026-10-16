@@ -196,9 +196,12 @@ importers:
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
+      ai:
+        specifier: ^7.0.137
+        version: 7.0.140(zod@4.6.5)
       eve:
-        specifier: 0.71.2
-        version: 0.71.2(ai@7.0.128(zod@4.6.5))(microsandbox@0.5.10)
+        specifier: 0.79.0
+        version: 0.79.0(ai@7.0.140(zod@4.6.5))(microsandbox@0.5.10)
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
@@ -210,7 +213,7 @@ importers:
     dependencies:
       '@openrouter/ai-sdk-provider':
         specifier: 3.1.0
-        version: 3.1.0(ai@7.0.128(zod@4.6.5))(zod@4.6.5)
+        version: 3.1.0(ai@7.0.140(zod@4.6.5))(zod@4.6.5)
       '@stripe/link-integrations-better-auth':
         specifier: workspace:*
         version: link:../../better-auth
@@ -218,14 +221,14 @@ importers:
         specifier: workspace:*
         version: link:..
       ai:
-        specifier: ^7.0.128
-        version: 7.0.128(zod@4.6.5)
+        specifier: ^7.0.137
+        version: 7.0.140(zod@4.6.5)
       better-auth:
         specifier: 1.7.7
         version: 1.7.7(next@16.3.8(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@5.0.3(@types/node@26.6.4)(vite@8.2.0(@types/node@26.6.4)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
       eve:
-        specifier: 0.71.2
-        version: 0.71.2(ai@7.0.128(zod@4.6.5))(microsandbox@0.5.10)
+        specifier: 0.79.0
+        version: 0.79.0(ai@7.0.140(zod@4.6.5))(microsandbox@0.5.10)
       zod:
         specifier: 4.6.5
         version: 4.6.5
@@ -272,20 +275,20 @@ packages:
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
 
-  '@ai-sdk/gateway@4.0.104':
-    resolution: {integrity: sha512-4lTyt8a4BMfVz4QGo+VO5odakmYMX5kq+xiRgdQGGY7o/jP2WSasp6LvIvYvt/lHzz1MfE+xKTOJhz7mMwjynA==}
+  '@ai-sdk/gateway@4.0.113':
+    resolution: {integrity: sha512-fYov5+sH1A20/eN1PaL5z8bZ9RUq0CcL9yAsAhCHz/qUCKliDOg9HXjNYzOUlH6o21lIrp/aKQc8QLGkEEZGlQ==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/provider-utils@5.0.54':
-    resolution: {integrity: sha512-amqDxFnw9+dpVrDACRDGmExUUNOH9C1D2bhg/DqWJnamEOieDTXBBXLHujSby/0MqHdAFksnpE8Pzfqx6ABMBw==}
+  '@ai-sdk/provider-utils@5.0.59':
+    resolution: {integrity: sha512-eaXBTkguxBFzS+KvxGRsbdkX9A7+R1g/C4jWx9mup0oSs3Cx5Mb427/byGpD2XL8SnMYT9O8LmXBmrgo+N3TJw==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/provider@4.0.22':
-    resolution: {integrity: sha512-1Jtmn36VNMOBo9CMUQrPqsR744qtqRloEiXpWCYS8ffPlhS2CrSNmoho5lPjp3R7EnkzBsGI6p51TA7fQJQZdA==}
+  '@ai-sdk/provider@4.0.27':
+    resolution: {integrity: sha512-TtWwm6SxFiPomlMIbTQa+yhJte+w4/oCsW+wJrJzMC3MqHpAY9e5dJF1Y4HxyKt3W2Csac0KiI76Ckio11TFYw==}
     engines: {node: '>=22'}
 
   '@alcalzone/ansi-tokenize@0.3.1':
@@ -1648,8 +1651,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  ai@7.0.128:
-    resolution: {integrity: sha512-WMKN83DodYtH52ETPHq0jrSwj3wU0aHkhLHXMrwMRabC/aMpIqeWsXJgjkUwrOqkaKHWONdupk/2ttPRvAyFcg==}
+  ai@7.0.140:
+    resolution: {integrity: sha512-GHWqpUcY7EsRHc7jC99SqzpgabExb9w7anxDYa5N79AIVsGavIZFxZKhVQ/SORkuXFkPO4FG8cCSweaGutvwSw==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -2076,13 +2079,13 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
-  eve@0.71.2:
-    resolution: {integrity: sha512-1JYtSScSYevikoDVowtZdMS83LGzdw3hmgf6kriZyclpRsmmW3+Yb9byFtJ4P4lZ2JLfSSLgUMoBuTSqmFCsUg==}
+  eve@0.79.0:
+    resolution: {integrity: sha512-H+SERBdpVUh3w5r/KQxOMnN/fyXiE3UXyBL56yviVON5UHLbBZBbobCzdOUog5OsP3hw1iZzjcSuHC0XF2YJ4Q==}
     engines: {node: '>=24'}
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
-      ai: ^7.0.105
+      ai: ^7.0.137
       braintrust: ^3.0.0
       chat: ^4.41.0
       dd-trace: ^6.13.0
@@ -3316,23 +3319,23 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.1': {}
 
-  '@ai-sdk/gateway@4.0.104(zod@4.6.5)':
+  '@ai-sdk/gateway@4.0.113(zod@4.6.5)':
     dependencies:
-      '@ai-sdk/provider': 4.0.22
-      '@ai-sdk/provider-utils': 5.0.54(zod@4.6.5)
+      '@ai-sdk/provider': 4.0.27
+      '@ai-sdk/provider-utils': 5.0.59(zod@4.6.5)
       '@vercel/oidc': 3.2.0
       zod: 4.6.5
 
-  '@ai-sdk/provider-utils@5.0.54(zod@4.6.5)':
+  '@ai-sdk/provider-utils@5.0.59(zod@4.6.5)':
     dependencies:
-      '@ai-sdk/provider': 4.0.22
+      '@ai-sdk/provider': 4.0.27
       '@standard-schema/spec': 1.1.0
       '@workflow/serde': 4.1.0
       eventsource-parser: 3.1.1
       undici: 7.30.0
       zod: 4.6.5
 
-  '@ai-sdk/provider@4.0.22':
+  '@ai-sdk/provider@4.0.27':
     dependencies:
       json-schema: 0.4.0
 
@@ -3921,9 +3924,9 @@ snapshots:
 
   '@noble/hashes@2.4.0': {}
 
-  '@openrouter/ai-sdk-provider@3.1.0(ai@7.0.128(zod@4.6.5))(zod@4.6.5)':
+  '@openrouter/ai-sdk-provider@3.1.0(ai@7.0.140(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      ai: 7.0.128(zod@4.6.5)
+      ai: 7.0.140(zod@4.6.5)
       zod: 4.6.5
 
   '@opentelemetry/semantic-conventions@1.43.0': {}
@@ -4252,11 +4255,11 @@ snapshots:
 
   acorn@8.19.0: {}
 
-  ai@7.0.128(zod@4.6.5):
+  ai@7.0.140(zod@4.6.5):
     dependencies:
-      '@ai-sdk/gateway': 4.0.104(zod@4.6.5)
-      '@ai-sdk/provider': 4.0.22
-      '@ai-sdk/provider-utils': 5.0.54(zod@4.6.5)
+      '@ai-sdk/gateway': 4.0.113(zod@4.6.5)
+      '@ai-sdk/provider': 4.0.27
+      '@ai-sdk/provider-utils': 5.0.59(zod@4.6.5)
       zod: 4.6.5
 
   ajv-formats@3.0.1(ajv@8.20.0):
@@ -4667,9 +4670,9 @@ snapshots:
   etag@1.8.1:
     optional: true
 
-  eve@0.71.2(ai@7.0.128(zod@4.6.5))(microsandbox@0.5.10):
+  eve@0.79.0(ai@7.0.140(zod@4.6.5))(microsandbox@0.5.10):
     dependencies:
-      ai: 7.0.128(zod@4.6.5)
+      ai: 7.0.140(zod@4.6.5)
       nitro: 3.0.260903-beta
       undici: 8.10.2
     optionalDependencies:

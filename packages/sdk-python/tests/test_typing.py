@@ -63,11 +63,14 @@ async def valid_async(client: AsyncClient) -> None:
 """)
     command = [
         sys.executable,
+        "-I",
         "-m",
         "ty",
         "check",
         "--project",
         str(Path(__file__).resolve().parents[1]),
+        "--python",
+        sys.executable,
         str(example),
         "--output-format",
         "concise",

@@ -4,7 +4,7 @@ Use a Link wallet from an [Eve extension](https://eve.dev/docs/extensions).
 Tools reuse `@stripe/link-sdk/tools`; the extension adds Eve discovery
 and an Eve-specific wallet skill.
 
-Requires Node.js 24+. Built with Eve 0.54.4; Eve checks the generated extension
+Requires Node.js 24+. Built with Eve 0.79.0; Eve checks the generated extension
 compatibility metadata when a consumer builds.
 
 ## Install and mount

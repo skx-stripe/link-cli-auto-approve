@@ -1,0 +1,111 @@
+name: Release Python SDK
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-python
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  check:
+    if: github.repository == 'stripe/link-cli'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      publish: ${{ steps.release.outputs.publish }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check whether this version needs publishing
+        id: release
+        working-directory: packages/sdk-python
+        run: python3 scripts/release.py check >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: check
+    if: needs.check.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: packages/sdk-python
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: '0.9.22'
+          python-version: '3.11'
+      - run: uv python install
+      - run: uv run --isolated --no-project python -m unittest discover -s scripts
+      # uv builds the sdist first, then builds the wheel from that sdist.
+      - run: uv build --no-sources
+      - run: uv run --locked twine check --strict dist/*
+      - run: uv run --isolated --no-project python scripts/release.py validate
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: python-distributions
+          path: |
+            packages/sdk-python/dist/*.whl
+            packages/sdk-python/dist/*.tar.gz
+          if-no-files-found: error
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13', '3.14']
+    defaults:
+      run:
+        working-directory: packages/sdk-python
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: '0.9.22'
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          cache-dependency-glob: packages/sdk-python/uv.lock
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: python-distributions
+          path: packages/sdk-python/dist
+      - run: uv python install
+      - run: uv sync --locked
+      - run: uv run --locked ruff check .
+      - run: uv run --locked ruff format --check .
+      - run: uv run --locked ty check
+      - name: Test the release wheel
+        run: uv run --locked python scripts/test_wheel.py dist/*.whl
+
+  publish:
+    needs: [build, test]
+    if: github.repository == 'stripe/link-cli' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      # This job only handles the tested artifacts; it never executes SDK code.
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: python-distributions
+          path: dist
+      - name: Publish to PyPI with attestations
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          attestations: true
+          print-hash: true

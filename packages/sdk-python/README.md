@@ -5,7 +5,19 @@ accepts application-managed access tokens and covers the same API resources and
 parameters shared by the TypeScript and Go SDKs, with Python conventions for
 typing, validation, and configuration. It requires Python 3.11 or newer.
 
-## Local installation
+## Installation
+
+```bash
+uv add stripe-link-sdk
+# Or, with pip:
+pip install stripe-link-sdk
+```
+
+The distribution is named `stripe-link-sdk`; the import is `link`. The SDK does not log
+in, store credentials, or manage refresh tokens; these belong to the application
+embedding it.
+
+### Local development installation
 
 Use [uv](https://docs.astral.sh/uv/) for Python and dependency management. From
 your application's uv project, add this checkout as an editable dependency:
@@ -13,10 +25,6 @@ your application's uv project, add this checkout as an editable dependency:
 ```bash
 uv add --editable /path/to/link-cli/packages/sdk-python
 ```
-
-The distribution is named `link-sdk`; the import is `link`. This package is not
-published yet. The SDK does not log in, store credentials, or manage refresh
-tokens; these belong to the application embedding it.
 
 ## Quick start
 
@@ -271,11 +279,44 @@ uv run --locked pytest
 uv run --locked ruff check .
 uv run --locked ruff format --check .
 uv run --locked ty check
+uv run --locked python -m unittest discover -s scripts
 uv build
-uv run --isolated --no-project --with dist/*.whl tests/smoke_test.py
+uv run --locked twine check --strict dist/*
+uv run --locked python scripts/release.py validate
+uv run --locked python scripts/test_wheel.py dist/*.whl
 ```
 
 Use `uv add` / `uv add --dev` to manage dependencies and commit the resulting
 `uv.lock`. From the repository root, `pnpm run test:python` and
-`pnpm run check:python` invoke these checks through uv. CI covers Python 3.11–3.14
-with mocked HTTP requests; tests do not require access tokens or live purchases.
+`pnpm run check:python` invoke source tests and lint/type checks through uv.
+CI runs the complete SDK suite against the built wheel on Python 3.11–3.14.
+Tests use mocked HTTP requests and require no access tokens or live purchases.
+
+The wheel test copies the tests and configuration to a temporary directory,
+installs the wheel with locked development tools, and checks that imports come
+from the installed distribution. It includes the consumer typing tests and the
+import/model smoke test, with no SDK checkout sources available to the tests.
+Runtime dependencies are resolved from the wheel's declared requirements.
+
+Twine validates metadata and README rendering. The archive check permits only
+Python modules and `py.typed`, plus the license and required packaging metadata;
+the source archive also includes `pyproject.toml` and README. It rejects extra or
+missing files and compares packaged source files with the checkout. Add any new
+runtime data assets explicitly to the archive check before publishing them.
+Use an empty `dist/` directory when building a new version; stale artifacts are
+rejected too.
+
+## Releasing
+
+Python versions are independent of the npm and Go packages. Prepare a PR that
+updates `project.version` in `pyproject.toml`, adds release notes to
+[CHANGELOG.md](CHANGELOG.md), and refreshes the lockfile with `uv lock`.
+Use a normalized Python version such as `0.2.0` or `0.2.0rc1`.
+
+Merging into `main` publishes the new version to PyPI automatically. The
+**Release Python SDK** workflow checks PyPI on each push, skips complete existing
+releases, builds a wheel and source distribution, validates their metadata and
+contents, and runs the full SDK suite against the release wheel on Python
+3.11–3.14. A separate job publishes those artifacts using PyPI Trusted
+Publishing and creates attestations for both files. There is no PyPI API token,
+manual tag, or additional approval step.

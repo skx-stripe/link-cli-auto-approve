@@ -47,13 +47,15 @@ jobs:
 
       - run: uv python install
       - run: uv sync --locked
-      - run: uv run --locked pytest
       - run: uv run --locked ruff check .
       - run: uv run --locked ruff format --check .
       - run: uv run --locked ty check
+      - run: uv run --locked python -m unittest discover -s scripts
       - run: uv build
-      - name: Smoke test built wheel
-        run: uv run --isolated --no-project --with dist/*.whl tests/smoke_test.py
+      - run: uv run --locked twine check --strict dist/*
+      - run: uv run --locked python scripts/release.py validate
+      - name: Test built wheel
+        run: uv run --locked python scripts/test_wheel.py dist/*.whl
 
   agent-identity-node22:
     runs-on: ubuntu-latest
